@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { VerificationModule } from './verification/verification.module';
 import { MentorProfilesModule } from './mentor-profiles/mentor-profiles.module';
-import { CourseCategoriesModule } from './course-categories/course-categories.module';
 import { CoursesModule } from './courses/courses.module';
 import { AssignedCoursesModule } from './assigned-courses/assigned-courses.module';
 import { PurchasedCoursesModule } from './purchased-courses/purchased-courses.module';
@@ -20,6 +19,6 @@ import { QuestionsModule } from './questions/questions.module';
 import { QuestionAnswersModule } from './question-answers/question-answers.module';
 
 @Module({
-  imports: [UsersModule, VerificationModule, MentorProfilesModule, CourseCategoriesModule, CoursesModule, AssignedCoursesModule, PurchasedCoursesModule, RatingsModule, LastActivitiesModule, LessonGroupsModule, LessonsModule, LessonViewsModule, LessonFilesModule, HomeworksModule, HomeworkSubmissionsModule, ExamsModule, ExamResultsModule, QuestionsModule, QuestionAnswersModule]
+  imports: [UsersModule, VerificationModule, MentorProfilesModule, CoursesModule, AssignedCoursesModule, PurchasedCoursesModule, RatingsModule, LastActivitiesModule, LessonGroupsModule, LessonsModule, LessonViewsModule, LessonFilesModule, HomeworksModule, HomeworkSubmissionsModule, ExamsModule, ExamResultsModule, QuestionsModule, QuestionAnswersModule]
 })
 export class ModulesModule {}
