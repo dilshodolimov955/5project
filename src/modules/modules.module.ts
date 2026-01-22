@@ -1,24 +1,27 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
-import { VerificationModule } from './verification/verification.module';
-import { MentorProfilesModule } from './mentor-profiles/mentor-profiles.module';
-import { CoursesModule } from './courses/courses.module';
-import { AssignedCoursesModule } from './assigned-courses/assigned-courses.module';
-import { PurchasedCoursesModule } from './purchased-courses/purchased-courses.module';
-import { RatingsModule } from './ratings/ratings.module';
-import { LastActivitiesModule } from './last-activities/last-activities.module';
-import { LessonGroupsModule } from './lesson-groups/lesson-groups.module';
-import { LessonsModule } from './lessons/lessons.module';
-import { LessonViewsModule } from './lesson-views/lesson-views.module';
-import { LessonFilesModule } from './lesson-files/lesson-files.module';
-import { HomeworksModule } from './homeworks/homeworks.module';
-import { HomeworkSubmissionsModule } from './homework-submissions/homework-submissions.module';
-import { ExamsModule } from './exams/exams.module';
-import { ExamResultsModule } from './exam-results/exam-results.module';
-import { QuestionsModule } from './questions/questions.module';
-import { QuestionAnswersModule } from './question-answers/question-answers.module';
+import { HomeworkModule } from './homework/homework.module';
+import { MentorProfileModule } from './mentor_profile/mentor_profile.module';
+import { PassportModule } from '@nestjs/passport';
+import { ConfigModule } from '@nestjs/config';
+import { CourseCategoryModule } from './course_category/course_category.module';
+import { LessonGroupModule } from './lesson_group/lesson_group.module';
+import { ProfileModule } from './profile/profile.module';
+import { CourseModule } from './courses/course.module';
+import { JwtStrategy } from './common/strategies/jwt.strategy';
 
 @Module({
-  imports: [UsersModule, VerificationModule, MentorProfilesModule, CoursesModule, AssignedCoursesModule, PurchasedCoursesModule, RatingsModule, LastActivitiesModule, LessonGroupsModule, LessonsModule, LessonViewsModule, LessonFilesModule, HomeworksModule, HomeworkSubmissionsModule, ExamsModule, ExamResultsModule, QuestionsModule, QuestionAnswersModule]
+  imports: [
+    ConfigModule,
+    PassportModule,
+    UsersModule,
+    HomeworkModule,
+    MentorProfileModule,
+    CourseModule,
+    CourseCategoryModule,
+    LessonGroupModule,
+    ProfileModule,
+  ],
+  providers: [JwtStrategy],
 })
 export class ModulesModule {}

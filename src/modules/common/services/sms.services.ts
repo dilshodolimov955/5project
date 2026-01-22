@@ -5,30 +5,30 @@ import axios from 'axios';
 export class SmsService {
   private token: string;
   private readonly $axios = axios.create({
-    baseURL: "https://notify.eskiz.uz/api",
-  })
+    baseURL: 'https://notify.eskiz.uz/api',
+  });
   async sendSMS(message: string, phone: string) {
     try {
       if (!this.token) {
-        await this.login()
+        await this.login();
       }
       await this.$axios.post(
-        "/message/sms/send",
+        '/message/sms/send',
         {
           mobile_phone: phone,
           message: message,
-          from: '4546'
+          from: '4546',
         },
         {
           headers: {
             Authorization: `Bearer ${this.token}`,
-          }
-        }
-      )
+          },
+        },
+      );
 
-      console.log(`SMS yuborildi: ${message} -> ${phone}`)
+      console.log(`SMS yuborildi: ${message} -> ${phone}`);
     } catch (error) {
-      console.error('SMS yuborishda xatolik:', error)
+      console.error('SMS yuborishda xatolik:', error);
     }
   }
 
@@ -38,12 +38,12 @@ export class SmsService {
         '/auth/login',
         {
           email: process.env.SMS_LOGIN,
-          password: process.env.SMS_PASSWORD
-        }
-      )
-      this.token = data.data.token
+          password: process.env.SMS_PASSWORD,
+        },
+      );
+      this.token = data.data.token;
     } catch (error) {
-      console.error('SMS login xatolik:', error)
+      console.error('SMS login xatolik:', error);
     }
   }
 }

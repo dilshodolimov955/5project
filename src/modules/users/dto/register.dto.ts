@@ -5,22 +5,26 @@ import { IsString, IsEnum, MinLength } from 'class-validator';
 export class RegisterDto {
   @ApiProperty({ example: '+998901112233' })
   @IsString()
-  phone: string
-  
+  phone: string;
+
   @ApiProperty({ example: 'string' })
   @IsString()
-  fullName: string
-  
-  @ApiProperty({ example: '00000000'})
+  fullName: string;
+
+  @ApiProperty({ example: '00000000' })
   @IsString()
   @MinLength(6)
-  password: string
+  password: string;
 
-  @ApiProperty({ enum: UserRole, default: UserRole.STUDENT  })
+  @ApiProperty({ enum: UserRole, default: UserRole.STUDENT })
   @IsEnum(UserRole)
-  role: UserRole = UserRole.STUDENT
+  role: UserRole = UserRole.STUDENT;
 
-  @ApiProperty({ example: "http:example.com"})
+  @ApiProperty({ example: '000000' })
   @IsString()
-  image: string
+  otp: string;
+
+  @ApiProperty({ example: 'http:example.com' })
+  @IsString()
+  image: string;
 }

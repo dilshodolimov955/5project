@@ -26,5 +26,5 @@ export class UpdateUserDto {
   @ApiPropertyOptional({ example: 'https://example.com' })
   @IsOptional()
   @IsString()
-  image?: string
+  image?: string;
 }

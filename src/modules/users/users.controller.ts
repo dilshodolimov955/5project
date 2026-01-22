@@ -1,11 +1,13 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { IsPublic } from '../common/decorator/is-public.decorator';
-import { VerifyDto } from './dto/werify.dto';
-
+import { RefreshToken } from './dto/refresh_token.dto';
+import { ResetPassword } from './dto/reset-password.dto';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { EditPhoneDto } from './dto/edit-phone.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -15,24 +17,31 @@ export class UsersController {
   @IsPublic()
   @Post('register')
   async register(@Body() dto: RegisterDto) {
-    return this.usersService.register(dto)
-  }
-
-  @IsPublic()
-  @Post('verify')
-  async verify(@Body() dto: VerifyDto) {
-    return this.usersService.verify(dto)
+    return this.usersService.register(dto);
   }
 
   @IsPublic()
   @Post('login')
   async login(@Body() dto: LoginDto) {
-    return this.usersService.login(dto)
+    return this.usersService.login(dto);
   }
 
+  @IsPublic()
+  @Post('refresh-token')
+  async refreshToken(@Body() dto: RefreshToken) {
+    return this.usersService.refreshToken(dto);
+  }
+
+  @IsPublic()
+  @Post('reset-password')
+  async resetPassword(@Body() dto: ResetPassword) {
+    return this.usersService.resetPassword(dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('edit-phone')
   @ApiBearerAuth()
-  @Get('profile/:id')
-  async getProfile(@Param('id') id: string) {
-    return this.usersService.getProfile(parseInt(id))
+  async editPhone(@Request() req: any, @Body() dto: EditPhoneDto) {
+    return this.usersService.editPhone(req.user.sub, dto.newPhone, dto.otp);
   }
 }

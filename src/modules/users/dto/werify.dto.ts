@@ -4,10 +4,10 @@ import { IsString, Length } from 'class-validator';
 export class VerifyDto {
   @ApiProperty({ example: '+998901112233' })
   @IsString()
-  phone: string
+  phone: string;
 
   @ApiProperty({ example: '000000' })
   @IsString()
   @Length(6, 6)
-  otp: string
+  otp: string;
 }
