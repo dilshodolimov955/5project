@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  ForbiddenException,
-  NotFoundException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import {Injectable,ForbiddenException,NotFoundException,HttpException,HttpStatus,} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateMentorProfileDto } from './dto/create-mentor_profile.dto';
 import { UpdateMentorProfileDto } from './dto/update-mentor_profile.dto';
