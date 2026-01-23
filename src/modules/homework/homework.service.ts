@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException,  BadRequestException,} from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateHomeworkDto } from './dto/create-homework.dto';
 import { UpdateHomeworkDto } from './dto/update-homework.dto';
@@ -7,7 +7,7 @@ import { UpdateHomeworkDto } from './dto/update-homework.dto';
 export class HomeworkService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createHomeworkDto: CreateHomeworkDto, userId: number) {
+  async create(createHomeworkDto: CreateHomeworkDto, userId: string) {
     try {
       const homework = await this.prisma.homework.create({
         data: {
@@ -39,79 +39,51 @@ export class HomeworkService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     try {
       const homework = await this.prisma.homework.findUnique({
-        where: { id },
+        where: { id: parseInt(id) },
         include: {
           lesson: true,
           submissions: true,
         },
       });
       if (!homework) {
-        throw new NotFoundException(`ID: ${id} vazifa topilmadi`);
+        throw new NotFoundException('Vazifa topilmadi');
       }
       return homework;
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
       throw new BadRequestException('Vazifani olishda xato yuz berdi');
     }
   }
 
-  async update(
-    id: number,
-    updateHomeworkDto: UpdateHomeworkDto,
-    userId: number,
-  ) {
+  async update(id: string, updateHomeworkDto: UpdateHomeworkDto, userId: string) {
     try {
-      const homework = await this.prisma.homework.findUnique({
-        where: { id },
-      });
-      if (!homework) {
-        throw new NotFoundException(`ID: ${id} vazifa topilmadi`);
-      }
-
-      const updated = await this.prisma.homework.update({
-        where: { id },
+      const homework = await this.prisma.homework.update({
+        where: { id: parseInt(id) },
         data: {
-          task: updateHomeworkDto.task || homework.task,
-          file: updateHomeworkDto.file || homework.file,
-          lessonId: updateHomeworkDto.lessonId || homework.lessonId,
-          updatedAt: new Date(),
+          task: updateHomeworkDto.task,
+          file: updateHomeworkDto.file,
+          lessonId: updateHomeworkDto.lessonId,
         },
         include: {
           lesson: true,
         },
       });
-      return updated;
+      return homework;
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new BadRequestException('Vazifani tahrirlashda xato yuz berdi');
+      throw new BadRequestException('Vazifani yangilashda xato yuz berdi');
     }
   }
 
-  async remove(id: number, userId: number) {
+  async remove(id: string, userId: string) {
     try {
-      const homework = await this.prisma.homework.findUnique({
-        where: { id },
-      });
-      if (!homework) {
-        throw new NotFoundException(`ID: ${id} vazifa topilmadi`);
-      }
-
       await this.prisma.homework.delete({
-        where: { id },
+        where: { id: parseInt(id) },
       });
-      return { message: `ID: ${id} vazifa o'chirildi` };
+      return { message: 'Vazifa o\'chirildi' };
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new BadRequestException("Vazifani o'chirishda xato yuz berdi");
+      throw new BadRequestException('Vazifani o\'chirishda xato yuz berdi');
     }
   }
 }

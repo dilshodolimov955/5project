@@ -1,24 +1,15 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Request,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Query } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { UserRole } from '@prisma/client';
-import { Roles } from '../common/decorator/roles.decorator';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+import { RolesGuard } from '@/common/decorator/roles.guards';
+import { Roles } from '@/common/decorator/roles.decorator';
 
 @ApiBearerAuth()
-@UseGuards()
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Course')
 @Controller('course')
 export class CourseController {
@@ -26,7 +17,7 @@ export class CourseController {
 
   @Post()
   @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'ADMIN' })
+  @ApiOperation({ summary: "ADMIN"})
   create(@Body() createCourseDto: CreateCourseDto, @Request() req: any) {
     return this.courseService.create(createCourseDto, req.user.id);
   }
@@ -43,9 +34,9 @@ export class CourseController {
 
   @Get(':id')
   @Roles(UserRole.ADMIN, UserRole.MENTOR, UserRole.ASSISTANT, UserRole.STUDENT)
-  @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT, STUDENT' })
+  @ApiOperation({ summary: "ADMIN, MENTOR, ASSISTANT, STUDENT" })
   findOne(@Param('id') id: string) {
-    return this.courseService.findOne(id);
+    return this.courseService.findOne(id)
   }
 
   @Patch(':id')

@@ -1,17 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { ResetPassword } from './dto/reset-password.dto';
+import { RefreshToken } from './dto/refresh_token.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { RedisService } from '../common/redis/redis.service';
-import { SmsService } from '../common/services/sms.services';
+import { RedisService } from '@/common/redis/redis.service';
+import { SmsService } from '@/common/services/sms.services';
 import { VerificationService } from '../verification/verification.service';
-import { RegisterDto } from './dto/register.dto';
-import { EVerificationTypes } from '../common/types/verification.types';
+import { EVerificationTypes } from '@/common/types/verification.types';
 import { VerifyDto } from './dto/werify.dto';
-import { RefreshToken } from './dto/refresh_token.dto';
-import { ResetPassword } from './dto/reset-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -240,7 +239,12 @@ export class UsersService {
     };
   }
 
-  async editPhone(userId: number, newPhone: string, otp: string) {
+  async editPhone(
+    userId: string,
+    newPhone: string,
+    otp: string,
+    oldPhone: string,
+  ) {
     const key = `${EVerificationTypes.EDIT_PHONE}_${newPhone}`;
     const storedOtp = await this.redis.get(key);
     if (!storedOtp || storedOtp !== otp) {
@@ -251,18 +255,24 @@ export class UsersService {
     }
 
     const user = await this.prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: parseInt(userId) },
     });
 
     if (!user) {
       throw new HttpException('Foydalanuvchi topilmadi', HttpStatus.NOT_FOUND);
+    }
+    if (user.phone !== oldPhone) {
+      throw new HttpException(
+        "Eski telefon raqam noto'g'ri",
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const phoneExists = await this.prisma.user.findUnique({
       where: { phone: newPhone },
     });
 
-    if (phoneExists && phoneExists.id !== userId) {
+    if (phoneExists && phoneExists.id !== parseInt(userId)) {
       throw new HttpException(
         "Bu telefon raqam allaqachon ro'yxatdan o'tgan",
         HttpStatus.BAD_REQUEST,
@@ -270,14 +280,14 @@ export class UsersService {
     }
 
     const updatedUser = await this.prisma.user.update({
-      where: { id: userId },
+      where: { id: parseInt(userId) },
       data: { phone: newPhone },
     });
-
     await this.vericationService.deleteOtp(
       EVerificationTypes.EDIT_PHONE,
       newPhone,
     );
+
     const { password, ...userWithoutPassword } = updatedUser;
     return {
       message: "Telefon raqam muvaffaqiyatli o'zgartirildi",

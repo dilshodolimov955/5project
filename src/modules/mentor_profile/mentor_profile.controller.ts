@@ -1,23 +1,12 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Request,
-  Query,
-} from '@nestjs/common';
+import {Controller,Get,Post,Body,Patch,Param,Delete,UseGuards,Request,Query,} from '@nestjs/common';
 import { ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { MentorProfileService } from './mentor_profile.service';
 import { CreateMentorProfileDto } from './dto/create-mentor_profile.dto';
 import { UpdateMentorProfileDto } from './dto/update-mentor_profile.dto';
 import { UserRole } from '@prisma/client';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/decorator/roles.guards';
-import { Roles } from '../common/decorator/roles.decorator';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+import { RolesGuard } from '@/common/decorator/roles.guards';
+import { Roles } from '@/common/decorator/roles.decorator';
 
 @ApiBearerAuth()
 @Controller('mentor_profile')

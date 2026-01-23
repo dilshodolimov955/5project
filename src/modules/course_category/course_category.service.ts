@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCourseCategoryDto } from './dto/create-course_category.dto';
 import { UpdateCourseCategoryDto } from './dto/update-course_category.dto';
@@ -18,22 +13,22 @@ export class CourseCategoryService {
         name: {
           equals: createCourseCategoryDto.name,
           mode: 'insensitive',
-        },
-      },
-    });
+        }
+      }
+    })
 
     if (existingCategory) {
       throw new HttpException(
         'Bu kategoriya allaqachon mavjud',
-        HttpStatus.BAD_REQUEST,
-      );
+        HttpStatus.BAD_REQUEST
+      )
     }
 
     return this.prisma.courseCategory.create({
       data: {
-        name: createCourseCategoryDto.name,
-      },
-    });
+        name: createCourseCategoryDto.name
+      }
+    })
   }
 
   async findAll() {
@@ -43,17 +38,17 @@ export class CourseCategoryService {
           where: { published: true },
           select: {
             id: true,
-            name: true,
-          },
-        },
+            name: true
+          }
+        }
       },
-      orderBy: { name: 'asc' },
-    });
+      orderBy: { name: 'asc' }
+    })
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const category = await this.prisma.courseCategory.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
       include: {
         courses: {
           where: { published: true },
@@ -62,76 +57,72 @@ export class CourseCategoryService {
             name: true,
             price: true,
             banner: true,
-            level: true,
-          },
-        },
-      },
-    });
+            level: true
+          }
+        }
+      }
+    })
 
     if (!category) {
       throw new NotFoundException('Kategoriya topilmadi');
     }
-
-    return category;
+    return category
   }
 
-  async update(id: number, updateCourseCategoryDto: UpdateCourseCategoryDto) {
+  async update(id: string, updateCourseCategoryDto: UpdateCourseCategoryDto) {
     const category = await this.prisma.courseCategory.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     if (!category) {
-      throw new NotFoundException('Kategoriya topilmadi');
+      throw new NotFoundException('Kategoriya topilmadi')
     }
-
-    // Check if new name already exists
     if (updateCourseCategoryDto.name) {
       const existingCategory = await this.prisma.courseCategory.findFirst({
         where: {
           name: {
             equals: updateCourseCategoryDto.name,
-            mode: 'insensitive',
+            mode: 'insensitive'
           },
           NOT: {
-            id: id,
-          },
-        },
-      });
+            id: parseInt(id)
+          }
+        }
+      })
 
       if (existingCategory) {
         throw new HttpException(
           'Bu kategoriya allaqachon mavjud',
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
     }
 
     return this.prisma.courseCategory.update({
-      where: { id },
+      where: { id: parseInt(id) },
       data: updateCourseCategoryDto,
       include: {
         courses: {
           where: { published: true },
           select: {
             id: true,
-            name: true,
-          },
-        },
-      },
-    });
+            name: true
+          }
+        }
+      }
+    })
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const category = await this.prisma.courseCategory.findUnique({
-      where: { id },
-    });
+      where: { id: parseInt(id) }
+    })
 
     if (!category) {
-      throw new NotFoundException('Kategoriya topilmadi');
+      throw new NotFoundException('Kategoriya topilmadi')
     }
 
-    return this.prisma.courseCategory.delete({
-      where: { id },
-    });
+    await this.prisma.courseCategory.delete({ where: { id: parseInt(id) } })
+    return `Kategoriya o;chirildi`
   }
 }

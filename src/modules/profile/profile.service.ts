@@ -6,9 +6,9 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 export class ProfileService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getProfile(userId: number) {
+  async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: parseInt(userId) },
       include: {
         mentorProfile: true,
         assigned: {
@@ -64,9 +64,9 @@ export class ProfileService {
     };
   }
 
-  async updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
+  async updateProfile(userId: string, updateProfileDto: UpdateProfileDto) {
     const user = await this.prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: parseInt(userId) },
     });
 
     if (!user) {
@@ -74,9 +74,9 @@ export class ProfileService {
     }
 
     const updatedUser = await this.prisma.user.update({
-      where: { id: userId },
+      where: { id: parseInt(userId) },
       data: {
-        fullName: updateProfileDto.fullName|| user.fullName,
+        fullName: updateProfileDto.fullName || user.fullName,
         image: updateProfileDto.image || user.image,
       },
       include: {
@@ -124,22 +124,22 @@ export class ProfileService {
     };
   }
 
-  async deleteProfile(userId: number) {
+  async deleteProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
-      where: { id: userId }
-    })
+      where: { id: parseInt(userId) },
+    });
 
     if (!user) {
       throw new NotFoundException('Foydalanuvchi topilmadi');
     }
 
     await this.prisma.user.delete({
-      where: { id: userId }
-    })
+      where: { id: parseInt(userId) },
+    });
 
     return {
       message: "Profil o'chirildi",
-      userId: userId
-    }
+      userId: userId,
+    };
   }
 }

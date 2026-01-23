@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { VerificationService } from './verification.service';
-import { IsPublic } from '../common/decorator/is-public.decorator';
+import { IsPublic } from '@/common/decorator/is-public.decorator';
 import { SendOtpDto } from './dto/send-otp.dto';
 
 @ApiTags('Verification')

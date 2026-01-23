@@ -1,58 +1,39 @@
-import {Controller,Get,Post,Body,Patch,Param,Delete,UseGuards,Request,HttpCode, HttpStatus,} from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { HomeworkService } from './homework.service';
 import { CreateHomeworkDto } from './dto/create-homework.dto';
 import { UpdateHomeworkDto } from './dto/update-homework.dto';
-import { UserRole } from '@prisma/client';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/decorator/roles.guards';
-import { Roles } from '../common/decorator/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+import { Request } from '@nestjs/common';
 
-@ApiTags('Homework')
-@ApiBearerAuth()
 @Controller('homework')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class HomeworkController {
   constructor(private readonly homeworkService: HomeworkService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN, UserRole.MENTOR, UserRole.ASSISTANT)
-  @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT' })
-  @HttpCode(HttpStatus.CREATED)
   create(@Body() createHomeworkDto: CreateHomeworkDto, @Request() req: any) {
-    return this.homeworkService.create(createHomeworkDto, req.user.id);
+    return this.homeworkService.create(createHomeworkDto, req.user.sub);
   }
 
   @Get()
-  @Roles(UserRole.ADMIN, UserRole.ASSISTANT, UserRole.MENTOR, UserRole.STUDENT)
-  @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT, STUDENT' })
   findAll() {
     return this.homeworkService.findAll();
   }
 
   @Get(':id')
-  @Roles(UserRole.ADMIN, UserRole.ASSISTANT, UserRole.MENTOR, UserRole.STUDENT)
-  @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT, STUDENT' })
   findOne(@Param('id') id: string) {
-    return this.homeworkService.findOne(+id);
+    return this.homeworkService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles(UserRole.ADMIN, UserRole.MENTOR, UserRole.ASSISTANT)
-  @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT' })
-  update(
-    @Param('id') id: string,
-    @Body() updateHomeworkDto: UpdateHomeworkDto,
-    @Request() req: any,
-  ) {
-    return this.homeworkService.update(+id, updateHomeworkDto, req.user.id);
+  update(@Param('id') id: string, @Body() updateHomeworkDto: UpdateHomeworkDto, @Request() req: any) {
+    return this.homeworkService.update(id, updateHomeworkDto, req.user.sub);
   }
 
   @Delete(':id')
-  @Roles(UserRole.ADMIN, UserRole.MENTOR, UserRole.ASSISTANT)
-  @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT' })
-  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string, @Request() req: any) {
-    return this.homeworkService.remove(+id, req.user.id);
+    return this.homeworkService.remove(id, req.user.sub);
   }
 }

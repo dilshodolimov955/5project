@@ -18,9 +18,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/decorator/roles.guards';
-import { Roles } from '../common/decorator/roles.decorator';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
+import { RolesGuard } from '@/common/decorator/roles.guards';
+import { Roles } from '@/common/decorator/roles.decorator';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)

@@ -8,12 +8,16 @@ import { CourseCategoryModule } from './course_category/course_category.module';
 import { LessonGroupModule } from './lesson_group/lesson_group.module';
 import { ProfileModule } from './profile/profile.module';
 import { CourseModule } from './courses/course.module';
-import { JwtStrategy } from './common/strategies/jwt.strategy';
+import { JwtStrategy } from '@/common/strategies/jwt.strategy';
+import { LessonModule } from './lesson/lesson.module';
+import { AssignedCourseModule } from './assigned_course/assigned_course.module';
+import { CommonModule } from '@/common/common.module';
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule,
+    CommonModule,
     UsersModule,
     HomeworkModule,
     MentorProfileModule,
@@ -21,6 +25,8 @@ import { JwtStrategy } from './common/strategies/jwt.strategy';
     CourseCategoryModule,
     LessonGroupModule,
     ProfileModule,
+    LessonModule,
+    AssignedCourseModule,
   ],
   providers: [JwtStrategy],
 })

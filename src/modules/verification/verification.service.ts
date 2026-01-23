@@ -1,8 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { EVerificationTypes } from '../common/types/verification.types';
-import { generateOtp } from '../common/core/random';
-import { RedisService } from '../common/redis/redis.service';
-import { SmsService } from '../common/services/sms.services';
+import { EVerificationTypes } from '@/common/types/verification.types';
+import { generateOtp } from '@/common/core/random';
+import { RedisService } from '@/common/redis/redis.service';
+import { SmsService } from '@/common/services/sms.services';
 import { CreateVerificationDto } from './dto/register.dto';
 
 @Injectable()
