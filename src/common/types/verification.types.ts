@@ -9,10 +9,9 @@ export interface ICheckOtp {
   phone: string;
   otp: string;
 }
-export interface ICheckOtp{
+export interface ICheckOtp {
   type: EVerificationTypes;
-  phone:string;
+  phone: string;
   otp: string;
-  timestop:number
-  
+  timestop: number;
 }

@@ -12,6 +12,11 @@ import { JwtStrategy } from '@/common/strategies/jwt.strategy';
 import { LessonModule } from './lesson/lesson.module';
 import { AssignedCourseModule } from './assigned_course/assigned_course.module';
 import { CommonModule } from '@/common/common.module';
+import { LessonViewModule } from './lesson_view/lesson_view.module';
+import { RatingModule } from './rating/rating.module';
+import { LastAktivityModule } from './last-aktivity/last-aktivity.module';
+import { ExamModule } from './exam/exam.module';
+import { PurchasedCourseModule } from './purchased_course/purchased_course.module';
 
 @Module({
   imports: [
@@ -27,6 +32,11 @@ import { CommonModule } from '@/common/common.module';
     ProfileModule,
     LessonModule,
     AssignedCourseModule,
+    LessonViewModule,
+    RatingModule,
+    LastAktivityModule,
+    ExamModule,
+    PurchasedCourseModule,
   ],
   providers: [JwtStrategy],
 })

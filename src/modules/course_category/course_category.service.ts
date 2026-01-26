@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCourseCategoryDto } from './dto/create-course_category.dto';
 import { UpdateCourseCategoryDto } from './dto/update-course_category.dto';
@@ -13,22 +18,22 @@ export class CourseCategoryService {
         name: {
           equals: createCourseCategoryDto.name,
           mode: 'insensitive',
-        }
-      }
-    })
+        },
+      },
+    });
 
     if (existingCategory) {
       throw new HttpException(
         'Bu kategoriya allaqachon mavjud',
-        HttpStatus.BAD_REQUEST
-      )
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     return this.prisma.courseCategory.create({
       data: {
-        name: createCourseCategoryDto.name
-      }
-    })
+        name: createCourseCategoryDto.name,
+      },
+    });
   }
 
   async findAll() {
@@ -38,12 +43,12 @@ export class CourseCategoryService {
           where: { published: true },
           select: {
             id: true,
-            name: true
-          }
-        }
+            name: true,
+          },
+        },
       },
-      orderBy: { name: 'asc' }
-    })
+      orderBy: { name: 'asc' },
+    });
   }
 
   async findOne(id: string) {
@@ -57,16 +62,16 @@ export class CourseCategoryService {
             name: true,
             price: true,
             banner: true,
-            level: true
-          }
-        }
-      }
-    })
+            level: true,
+          },
+        },
+      },
+    });
 
     if (!category) {
       throw new NotFoundException('Kategoriya topilmadi');
     }
-    return category
+    return category;
   }
 
   async update(id: string, updateCourseCategoryDto: UpdateCourseCategoryDto) {
@@ -75,25 +80,25 @@ export class CourseCategoryService {
     });
 
     if (!category) {
-      throw new NotFoundException('Kategoriya topilmadi')
+      throw new NotFoundException('Kategoriya topilmadi');
     }
     if (updateCourseCategoryDto.name) {
       const existingCategory = await this.prisma.courseCategory.findFirst({
         where: {
           name: {
             equals: updateCourseCategoryDto.name,
-            mode: 'insensitive'
+            mode: 'insensitive',
           },
           NOT: {
-            id: parseInt(id)
-          }
-        }
-      })
+            id: parseInt(id),
+          },
+        },
+      });
 
       if (existingCategory) {
         throw new HttpException(
           'Bu kategoriya allaqachon mavjud',
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       }
     }
@@ -106,23 +111,23 @@ export class CourseCategoryService {
           where: { published: true },
           select: {
             id: true,
-            name: true
-          }
-        }
-      }
-    })
+            name: true,
+          },
+        },
+      },
+    });
   }
 
   async remove(id: string) {
     const category = await this.prisma.courseCategory.findUnique({
-      where: { id: parseInt(id) }
-    })
+      where: { id: parseInt(id) },
+    });
 
     if (!category) {
-      throw new NotFoundException('Kategoriya topilmadi')
+      throw new NotFoundException('Kategoriya topilmadi');
     }
 
-    await this.prisma.courseCategory.delete({ where: { id: parseInt(id) } })
-    return `Kategoriya o;chirildi`
+    await this.prisma.courseCategory.delete({ where: { id: parseInt(id) } });
+    return `Kategoriya o;chirildi`;
   }
 }

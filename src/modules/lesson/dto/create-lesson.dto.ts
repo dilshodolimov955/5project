@@ -6,17 +6,15 @@ export class CreateLessonDto {
   @ApiProperty({ example: 'string' })
   @IsString()
   @IsNotEmpty()
-  name: string
+  name: string;
 
   @ApiProperty({ example: 'string' })
   @IsString()
   @IsNotEmpty()
-  about: string
-  
+  about: string;
 
   @ApiProperty({ type: 'string', format: 'uuid' })
   @IsString()
   @IsNotEmpty()
-  bolimId: string
-
+  bolimId: string;
 }

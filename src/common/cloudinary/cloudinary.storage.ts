@@ -6,6 +6,6 @@ export const videoStorage = new CloudinaryStorage({
   params: async (req, file) => ({
     folder: 'lessons/videos',
     resource_type: 'video',
-    public_id: `${Date.now()}-${file.originalname}`
-  })
-})
+    public_id: `${Date.now()}-${file.originalname}`,
+  }),
+});

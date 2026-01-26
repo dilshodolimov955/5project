@@ -10,8 +10,8 @@ export class AssignedCourseService {
     const { userId, courseId } = createAssignedCourseDto;
 
     const user = await this.prisma.user.findUnique({
-      where: { id: parseInt(userId) }
-    })
+      where: { id: parseInt(userId) },
+    });
     if (!user) {
       throw new Error('User not found');
     }
@@ -19,7 +19,7 @@ export class AssignedCourseService {
       where: { id: courseId },
     });
     if (!course) {
-      throw new Error('Course not found')
+      throw new Error('Course not found');
     }
 
     const existingAssignment = await this.prisma.assignedCourse.findUnique({
@@ -60,40 +60,40 @@ export class AssignedCourseService {
       where: {
         userId_courseId: {
           userId: parseInt(userId),
-          courseId
-        }
+          courseId,
+        },
       },
       include: {
         user: true,
         course: true,
-      }
-    })
+      },
+    });
     if (!assignedCourse) {
       throw new Error('Assigned course not found');
     }
-    return assignedCourse
+    return assignedCourse;
   }
 
   async update(
     userId: string,
     courseId: string,
-    updateAssignedCourseDto: UpdateAssignedCourseDto
+    updateAssignedCourseDto: UpdateAssignedCourseDto,
   ) {
     const { userId: newUserId, courseId: newCourseId } =
-      updateAssignedCourseDto
+      updateAssignedCourseDto;
 
     await this.prisma.assignedCourse.delete({
       where: {
         userId_courseId: {
           userId: parseInt(userId),
-          courseId
-        }
-      }
-    })
+          courseId,
+        },
+      },
+    });
     return await this.create({
       userId: newUserId || userId,
-      courseId: newCourseId || courseId
-    })
+      courseId: newCourseId || courseId,
+    });
   }
 
   async remove(userId: string, courseId: string) {
@@ -101,13 +101,13 @@ export class AssignedCourseService {
       where: {
         userId_courseId: {
           userId: parseInt(userId),
-          courseId
-        }
+          courseId,
+        },
       },
       include: {
         user: true,
-        course: true
-      }
-    })
+        course: true,
+      },
+    });
   }
 }

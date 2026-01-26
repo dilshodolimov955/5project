@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+  Query,
+} from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -17,7 +28,7 @@ export class CourseController {
 
   @Post()
   @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: "ADMIN"})
+  @ApiOperation({ summary: 'ADMIN' })
   create(@Body() createCourseDto: CreateCourseDto, @Request() req: any) {
     return this.courseService.create(createCourseDto, req.user.id);
   }
@@ -34,9 +45,9 @@ export class CourseController {
 
   @Get(':id')
   @Roles(UserRole.ADMIN, UserRole.MENTOR, UserRole.ASSISTANT, UserRole.STUDENT)
-  @ApiOperation({ summary: "ADMIN, MENTOR, ASSISTANT, STUDENT" })
+  @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT, STUDENT' })
   findOne(@Param('id') id: string) {
-    return this.courseService.findOne(id)
+    return this.courseService.findOne(id);
   }
 
   @Patch(':id')

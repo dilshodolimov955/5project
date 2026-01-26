@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { CourseCategoryService } from './course_category.service';
 import { CreateCourseCategoryDto } from './dto/create-course_category.dto';
 import { UpdateCourseCategoryDto } from './dto/update-course_category.dto';
@@ -34,7 +43,7 @@ export class CourseCategoryController {
   @Roles(UserRole.ADMIN, UserRole.MENTOR, UserRole.ASSISTANT, UserRole.STUDENT)
   @ApiOperation({ summary: 'ADMIN, MENTOR, ASSISTANT, STUDENT' })
   findOne(@Param('id') id: string) {
-    return this.courseCategoryService.findOne(id)
+    return this.courseCategoryService.findOne(id);
   }
 
   @Patch(':id')
@@ -44,7 +53,7 @@ export class CourseCategoryController {
     @Param('id') id: string,
     @Body() updateCourseCategoryDto: UpdateCourseCategoryDto,
   ) {
-    return this.courseCategoryService.update(id, updateCourseCategoryDto)
+    return this.courseCategoryService.update(id, updateCourseCategoryDto);
   }
 
   @ApiBearerAuth()

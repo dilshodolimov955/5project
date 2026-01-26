@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateHomeworkDto } from './dto/create-homework.dto';
 import { UpdateHomeworkDto } from './dto/update-homework.dto';
@@ -57,7 +61,11 @@ export class HomeworkService {
     }
   }
 
-  async update(id: string, updateHomeworkDto: UpdateHomeworkDto, userId: string) {
+  async update(
+    id: string,
+    updateHomeworkDto: UpdateHomeworkDto,
+    userId: string,
+  ) {
     try {
       const homework = await this.prisma.homework.update({
         where: { id: parseInt(id) },
@@ -81,9 +89,9 @@ export class HomeworkService {
       await this.prisma.homework.delete({
         where: { id: parseInt(id) },
       });
-      return { message: 'Vazifa o\'chirildi' };
+      return { message: "Vazifa o'chirildi" };
     } catch (error) {
-      throw new BadRequestException('Vazifani o\'chirishda xato yuz berdi');
+      throw new BadRequestException("Vazifani o'chirishda xato yuz berdi");
     }
   }
 }

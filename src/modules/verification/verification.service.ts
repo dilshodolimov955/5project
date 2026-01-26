@@ -1,9 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { EVerificationTypes } from '@/common/types/verification.types';
-import { generateOtp } from '@/common/core/random';
-import { RedisService } from '@/common/redis/redis.service';
-import { SmsService } from '@/common/services/sms.services';
+import { RedisService } from 'src/common/redis/redis.service';
+import { EVerificationTypes } from 'src/common/types/verification.types';
+import { generateOtp } from 'src/common/core/random';
 import { CreateVerificationDto } from './dto/register.dto';
+import { SmsService } from '@/common/services/sms.services';
 
 @Injectable()
 export class VerificationService {
@@ -15,7 +15,7 @@ export class VerificationService {
   async sendOtp(type: EVerificationTypes, phone: string) {
     const otp = generateOtp();
     const key = `${type}_${phone}`;
-    await this.redis.set(key, otp, 600);
+    await this.redis.set(key, otp, 600); // 10 daqiqa
 
     let message = '';
     if (type === EVerificationTypes.REGISTER) {

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
@@ -24,17 +28,17 @@ export class LessonService {
           name: dto.name,
           about: dto.about,
           groupId: parseInt(dto.bolimId),
-          video: url
+          video: url,
         },
         include: {
           files: true,
-          homework: true
-        }
-      })
+          homework: true,
+        },
+      });
     } catch (error) {
       throw new BadRequestException(
-        `Failed to create lesson: ${error.message}`
-      )
+        `Failed to create lesson: ${error.message}`,
+      );
     }
   }
 
@@ -42,9 +46,9 @@ export class LessonService {
     return this.prisma.lesson.findMany({
       include: {
         files: true,
-        homework: true
-      }
-    })
+        homework: true,
+      },
+    });
   }
 
   async findOne(id: string) {
@@ -52,22 +56,22 @@ export class LessonService {
       where: { id },
       include: {
         files: true,
-        homework: true
-      }
-    })
-    if (!lesson) throw new NotFoundException('Lesson topilmadi')
-    return lesson
+        homework: true,
+      },
+    });
+    if (!lesson) throw new NotFoundException('Lesson topilmadi');
+    return lesson;
   }
 
   async update(id: string, dto: UpdateLessonDto, file?: Express.Multer.File) {
-    const lesson = await this.findOne(id)
+    const lesson = await this.findOne(id);
 
     try {
-      const updateData: any = { ...dto, updatedAt: new Date() }
+      const updateData: any = { ...dto, updatedAt: new Date() };
 
       if (file) {
-        const { url } = await this.cloudinaryService.uploadVideo(file)
-        updateData.videoUrl = url
+        const { url } = await this.cloudinaryService.uploadVideo(file);
+        updateData.videoUrl = url;
       }
 
       return this.prisma.lesson.update({
@@ -75,19 +79,19 @@ export class LessonService {
         data: updateData,
         include: {
           files: true,
-          homework: true
-        }
-      })
+          homework: true,
+        },
+      });
     } catch (error) {
       throw new BadRequestException(
-        `Failed to update lesson: ${error.message}`
-      )
+        `Failed to update lesson: ${error.message}`,
+      );
     }
   }
 
   async remove(id: string) {
     await this.findOne(id);
-    await this.prisma.lesson.delete({ where: { id }})
-    return "Lesson o'chirildi"
+    await this.prisma.lesson.delete({ where: { id } });
+    return "Lesson o'chirildi";
   }
 }

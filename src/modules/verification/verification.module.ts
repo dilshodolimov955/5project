@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { RedisModule } from 'src/common/redis/redis.module';
 import { VerificationController } from './verification.controller';
 import { VerificationService } from './verification.service';
-import { RedisModule } from '@/common/redis/redis.module';
 import { SmsService } from '@/common/services/sms.services';
 
 @Module({

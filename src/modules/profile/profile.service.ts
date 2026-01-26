@@ -16,9 +16,9 @@ export class ProfileService {
             course: {
               include: {
                 category: true,
-              }
-            }
-          }
+              },
+            },
+          },
         },
         purchased: {
           include: {
